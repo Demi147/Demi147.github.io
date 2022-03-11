@@ -1,9 +1,17 @@
 import React, { Component } from "react";
 import ReactDOM from "react-dom";
 import * as THREE from "three";
+import FirstGame from "./games/firstThreeGame";
 class App extends Component {
   render() {
-    return <div>Hello world</div>;
+    return (
+      <div>
+        Hello world
+        <div>
+          <FirstGame></FirstGame>
+        </div>
+      </div>
+    );
   }
 }
 
