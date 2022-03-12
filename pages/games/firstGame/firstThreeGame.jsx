@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import ReactDOM from "react-dom";
 import * as THREE from "three";
-import { generateCar } from "../../lib/firstGameLib/helperMethods";
+import { generateCar } from "../../../shared/lib/helperMethods";
 
 class FirstGame extends Component {
   componentWillUnmount() {
