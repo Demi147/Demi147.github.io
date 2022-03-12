@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import ReactDOM from "react-dom";
 import * as THREE from "three";
 import { generateCar } from "../../../shared/lib/helperMethods";
+import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 
 class FirstGame extends Component {
   componentWillUnmount() {
@@ -39,6 +40,8 @@ class FirstGame extends Component {
     renderer.setSize(window.innerWidth, window.innerHeight);
     document.body.appendChild(renderer.domElement);
 
+    const controls = new OrbitControls(camera, renderer.domElement);
+    controls.update();
     // var geometry = new THREE.BoxGeometry(1, 1, 1);
     // var material = new THREE.MeshLambertMaterial({ color: 0x00ff00 });
     // var cube = new THREE.Mesh(geometry, material);
@@ -56,6 +59,7 @@ class FirstGame extends Component {
     var cameraLoop = function () {
       requestAnimationFrame(cameraLoop);
       renderer.render(scene, camera);
+      controls.update();
     };
     cameraLoop();
   }
