@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import ReactDOM from "react-dom";
 import * as THREE from "three";
-import FirstGame from "./games/firstThreeGame";
+import FirstGame from "./games/firstGame/firstThreeGame";
 class App extends Component {
   render() {
     return (
