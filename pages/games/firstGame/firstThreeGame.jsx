@@ -19,7 +19,7 @@ class FirstGame extends Component {
     directionalLight.position.set(100, -300, 400);
     scene.add(directionalLight);
 
-    const aspectRatio = window.innerWidth / window.innerHeight;
+    const aspectRatio = 1.8;
     const cameraWidth = 150;
     const cameraHeight = cameraWidth / aspectRatio;
 
@@ -34,11 +34,10 @@ class FirstGame extends Component {
 
     camera.position.set(200, -200, 300);
     camera.up.set(0, 0, 1);
-    camera.lookAt(0, 0, 0);
 
     var renderer = new THREE.WebGLRenderer({ antialias: true });
     renderer.setSize(window.innerWidth, window.innerHeight);
-    document.body.appendChild(renderer.domElement);
+    document.getElementById("firstThingy").appendChild(renderer.domElement);
 
     const controls = new OrbitControls(camera, renderer.domElement);
     controls.update();
@@ -47,8 +46,16 @@ class FirstGame extends Component {
     // var cube = new THREE.Mesh(geometry, material);
     // scene.add(cube);
     var x = generateCar();
-    x.position.set(0, 0, 0);
+    x.position.set(0, 0, -20);
     scene.add(x);
+
+    var resizeLoop = function () {
+      requestAnimationFrame(resizeLoop);
+      var y = document.getElementById("firstThingy").clientHeight;
+      var x = document.getElementById("firstThingy").clientWidth;
+      renderer.setSize(x, y);
+    };
+    resizeLoop();
 
     var animate = function () {
       requestAnimationFrame(animate);
@@ -64,7 +71,7 @@ class FirstGame extends Component {
     cameraLoop();
   }
   render() {
-    return <div />;
+    return <div id="firstThingy" />;
   }
 }
 
