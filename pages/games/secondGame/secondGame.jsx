@@ -1,9 +1,9 @@
 import React from "react";
-import { useEffect } from "react/cjs/react.development";
 import * as THREE from "three";
 import { generateCar } from "../../../shared/lib/helperMethods";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import * as TICK from "../../../shared/lib/tickTackToe/tickTackToe";
+import { useEffect } from "react/cjs/react.production.min";
 
 function onload() {
   // === THREE.JS CODE START ===
