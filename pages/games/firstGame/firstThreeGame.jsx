@@ -71,7 +71,15 @@ class FirstGame extends Component {
     cameraLoop();
   }
   render() {
-    return <div id="firstThingy" />;
+    return (
+      <div>
+        <p>Use the mouse butons to navigate the object</p>
+        <p>left mouse button to chance view</p>
+        <p>right mouse button to move object</p>
+        <p>scroll wheel to zoom</p>
+        <div id="firstThingy"></div>
+      </div>
+    );
   }
 }
 
