@@ -1,0 +1,15 @@
+board will look like this due to generation function
+
+6,7,8
+3,4,5
+0,1,2
+
+with the board being a flat array
+
+number of win states = 8
+
+//Need to keep a copy of the game state to reflect the game visuals
+This copy will dictate moves and win conditions
+
+Player will be X
+AI will be 0

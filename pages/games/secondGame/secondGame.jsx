@@ -1,20 +1,13 @@
-import React from "react";
+import { React, useEffect } from "react";
 import * as THREE from "three";
 import { generateCar } from "../../../shared/lib/helperMethods";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import * as TICK from "../../../shared/lib/tickTackToe/tickTackToe";
-import { useEffect } from "react/cjs/react.production.min";
+//import { useEffect } from "react/cjs/react.production.min";
 
 function onload() {
   // === THREE.JS CODE START ===
-  var scene = new THREE.Scene();
-
-  //lights
-  const ambientLight = new THREE.AmbientLight(0xffffff, 0.8);
-  scene.add(ambientLight);
-  const directionalLight = new THREE.DirectionalLight(0xfff, 1);
-  directionalLight.position.set(100, -300, 400);
-  scene.add(directionalLight);
+  var scene = TICK.createScene();
 
   const aspectRatio = 1.8;
   const cameraWidth = 50;
@@ -34,11 +27,13 @@ function onload() {
   renderer.setSize(window.innerWidth, window.innerHeight);
   document.getElementById("secondGame").appendChild(renderer.domElement);
 
-  // var geometry = new THREE.BoxGeometry(1, 1, 1);
-  // var material = new THREE.MeshLambertMaterial({ color: 0x00ff00 });
-  // var cube = new THREE.Mesh(geometry, material);
-  // scene.add(cube);
-  scene.add(TICK.generateBackGround());
+  var background = TICK.generateBackGround();
+  scene.add(background);
+
+  //#region INIT GAME LOGIC
+
+  //#endregion
+
   var resizeLoop = function () {
     requestAnimationFrame(resizeLoop);
     var y = document.getElementById("secondGame").clientHeight;
