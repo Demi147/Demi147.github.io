@@ -2,8 +2,8 @@ export class TickTackToeGameLogic {
   /*
 	Notes:
 	null = empty
-	false = 0
-	true = X
+	false = 0 : AI
+	true = X : player
 	*/
 
   constructor() {

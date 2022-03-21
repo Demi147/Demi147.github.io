@@ -52,6 +52,13 @@ function onload() {
 function SecondGame() {
   useEffect(() => {
     onload();
+    var worker = new Worker(
+      new URL("../../../shared/lib/tickTackToe/AI.worker.js", import.meta.url)
+    );
+    worker.postMessage("test");
+    worker.onmessage = function (e) {
+      console.log(e.data);
+    };
   });
 
   return (

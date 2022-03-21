@@ -1,47 +1,40 @@
-/*
-// function  minimax(node, depth, maximizingPlayer) is
-//     if depth = 0 or node is a terminal node then
-//         return the heuristic value of node
-//     if maximizingPlayer then
-//         value := −∞
-//         for each child of node do
-//             value := max(value, minimax(child, depth − 1, FALSE))
-//         return value
-//     else (* minimizing player *)
-//         value := +∞
-//         for each child of node do
-//             value := min(value, minimax(child, depth − 1, TRUE))
-//         return value
-*/
-
-function minmax(node, depth, maximizingPlayer) {
-  var util = utilityFunction(node);
-  if (depth == 0 || util[0]) {
+export function minmax(board, depth, player) {
+  var util = utilityFunction(board);
+  if (depth == 0 || util[0] == true) {
+    console.log("end");
     return util[1];
   }
-  // function  minimax(node, depth, maximizingPlayer) is
-  //   if depth = 0 or node is a terminal node then
-  //       return the heuristic value of node
-  //   if maximizingPlayer then
-  //       value := −∞
-  //       for each child of node do
-  //           value := max(value, minimax(child, depth − 1, FALSE))
-  //       return value
-  //   else (* minimizing player *)
-  //       value := +∞
-  //       for each child of node do
-  //           value := min(value, minimax(child, depth − 1, TRUE))
-  //       return value
+
+  if (!player) {
+    var value = -9;
+    var moves = getPosibleMovesandPerform(board, true);
+    moves.forEach((element) => {
+      var tempVal = minmax(element, depth - 1, true);
+      if (tempVal > value) {
+        value = tempVal;
+      }
+    });
+  } else {
+    var value = 9;
+    var moves = getPosibleMovesandPerform(board, false);
+    moves.forEach((element) => {
+      var tempVal = minmax(element, depth - 1, false);
+      if (tempVal > value) {
+        value = tempVal;
+      }
+    });
+  }
 }
 
 function performMove(player, node, board) {
+  var temp = [...board];
   if (player) {
-    board[node] = true;
+    temp[node] = true;
   } else {
-    board[node] = false;
+    temp[node] = false;
   }
 
-  return board;
+  return temp;
 }
 
 function utilityFunction(board) {
@@ -82,11 +75,11 @@ function checkVerticals(board) {
     var baseMiddle = board[index + 3];
     var baseTop = board[index + 6];
 
-    if (((base == baseMiddle) == true) == baseTop) {
+    if (base == true && baseMiddle == true && baseTop == true) {
       return [true, true];
     }
 
-    if (((base == baseMiddle) == false) == baseTop) {
+    if (base == false && baseMiddle == false && baseTop == false) {
       return [true, false];
     }
   }
@@ -100,10 +93,10 @@ function checkHorizontals(board) {
     var baseMiddle = board[index + 1];
     var baseRight = board[index + 2];
 
-    if (((base == baseMiddle) == baseRight) == true) {
+    if (base == true && baseMiddle == true && baseRight == true) {
       return [true, true];
     }
-    if (((base == baseMiddle) == baseRight) == false) {
+    if (base == false && baseMiddle == false && baseRight == false) {
       return [true, false];
     }
   }
@@ -116,16 +109,29 @@ function checkCrosses(board) {
   var leftBottom = board[0];
   var middle = board[4];
   var topRight = board[8];
-  if (((leftBottom == middle) == topRight) == true) {
+  if (leftBottom == true && middle == true && topRight == true) {
     return [true, true];
   }
 
   //check \\
   var leftTop = board[6];
   var rightBottom = board[2];
-  if (((leftTop == middle) == rightBottom) == false) {
+  if (leftBottom == false && middle == false && topRight == false) {
     return [true, false];
   }
 
   return [false, false];
+}
+
+function getPosibleMovesandPerform(board, player) {
+  //debugger;
+  var states = [];
+  for (let index = 0; index < board.length; index++) {
+    const element = board[index];
+    if (element == null) {
+      states.push(performMove(player, index, board));
+    }
+  }
+  //debugger;
+  return states;
 }
