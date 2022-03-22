@@ -1,4 +1,11 @@
+var previousStates = [];
+
+export function resetPrevStates() {
+  previousStates = [];
+}
+
 export function minmax(board, depth, player) {
+  console.log([...previousStates]);
   var util = utilityFunction(board);
   if (depth == 0 || util[0] == true) {
     console.log("end");
@@ -9,18 +16,24 @@ export function minmax(board, depth, player) {
     var value = -9;
     var moves = getPosibleMovesandPerform(board, true);
     moves.forEach((element) => {
-      var tempVal = minmax(element, depth - 1, true);
-      if (tempVal > value) {
-        value = tempVal;
+      if (!previousStates.includes(element)) {
+        previousStates.push(element);
+        var tempVal = minmax(element, depth - 1, true);
+        if (tempVal > value) {
+          value = tempVal;
+        }
       }
     });
   } else {
     var value = 9;
     var moves = getPosibleMovesandPerform(board, false);
     moves.forEach((element) => {
-      var tempVal = minmax(element, depth - 1, false);
-      if (tempVal > value) {
-        value = tempVal;
+      if (!previousStates.includes(element)) {
+        previousStates.push(element);
+        var tempVal = minmax(element, depth - 1, false);
+        if (tempVal > value) {
+          value = tempVal;
+        }
       }
     });
   }
