@@ -1,5 +1,3 @@
-import * as AI from "./ticktacToeAI";
-
 if (Array.prototype.equals)
   console.warn(
     "Overriding existing Array.prototype.equals. Possible causes: New API defines the method, there's a framework conflict or you've got double inclusions in your code."
@@ -25,8 +23,7 @@ Array.prototype.equals = function (array) {
   return true;
 };
 
-self.onmessage = function (e) {
-  postMessage(69);
-  AI.resetPrevStates();
-  AI.minmax([null, null, null, null, null, null, null, null, null], 8, false);
+String.prototype.replaceAll = function (search, replacement) {
+  var target = this;
+  return target.replace(new RegExp(search, "g"), replacement);
 };

@@ -1,22 +1,29 @@
-var previousStates = [];
+var previousStates = [[null, null, null, null, null, null, null, null, null]];
 
 export function resetPrevStates() {
-  previousStates = [];
+  previousStates = [[null, null, null, null, null, null, null, null, null]];
 }
 
+var count = 0;
+
 export function minmax(board, depth, player) {
-  console.log([...previousStates]);
   var util = utilityFunction(board);
   if (depth == 0 || util[0] == true) {
-    console.log("end");
+    if (util[0] == true) {
+      console.log(`Winner player : ${util[1]}`);
+      console.log(board);
+      count++;
+      console.log(count);
+    }
     return util[1];
   }
 
   if (!player) {
+    //AI
     var value = -9;
     var moves = getPosibleMovesandPerform(board, true);
     moves.forEach((element) => {
-      if (!previousStates.includes(element)) {
+      if (!previousStates.some((q) => q.equals(element))) {
         previousStates.push(element);
         var tempVal = minmax(element, depth - 1, true);
         if (tempVal > value) {
@@ -25,13 +32,14 @@ export function minmax(board, depth, player) {
       }
     });
   } else {
+    //Player
     var value = 9;
     var moves = getPosibleMovesandPerform(board, false);
     moves.forEach((element) => {
-      if (!previousStates.includes(element)) {
+      if (!previousStates.some((q) => q.equals(element))) {
         previousStates.push(element);
         var tempVal = minmax(element, depth - 1, false);
-        if (tempVal > value) {
+        if (tempVal < value) {
           value = tempVal;
         }
       }
@@ -41,11 +49,7 @@ export function minmax(board, depth, player) {
 
 function performMove(player, node, board) {
   var temp = [...board];
-  if (player) {
-    temp[node] = true;
-  } else {
-    temp[node] = false;
-  }
+  temp[node] = player;
 
   return temp;
 }
@@ -125,10 +129,16 @@ function checkCrosses(board) {
   if (leftBottom == true && middle == true && topRight == true) {
     return [true, true];
   }
+  if (leftBottom == false && middle == false && topRight == false) {
+    return [true, false];
+  }
 
   //check \\
   var leftTop = board[6];
   var rightBottom = board[2];
+  if (leftBottom == true && middle == true && topRight == true) {
+    return [true, true];
+  }
   if (leftBottom == false && middle == false && topRight == false) {
     return [true, false];
   }

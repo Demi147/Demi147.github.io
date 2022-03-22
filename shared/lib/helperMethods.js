@@ -1,4 +1,5 @@
 import * as THREE from "three";
+
 export function generateCar() {
   let car = new THREE.Group();
 
