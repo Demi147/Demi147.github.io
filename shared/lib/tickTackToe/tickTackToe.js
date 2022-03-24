@@ -36,3 +36,45 @@ export function createScene() {
 
   return scene;
 }
+
+export function generateX() {
+  let x = new THREE.Group();
+
+  const block1 = new THREE.Mesh(
+    new THREE.BoxBufferGeometry(0.5, 3, 1),
+    new THREE.MeshLambertMaterial({ color: 0xf5f3f0 })
+  );
+  block1.rotation.z = (45 * Math.PI) / 180;
+  x.add(block1);
+
+  const block2 = new THREE.Mesh(
+    new THREE.BoxBufferGeometry(0.5, 3, 1),
+    new THREE.MeshLambertMaterial({ color: 0xf5f3f0 })
+  );
+  block2.rotation.z = (135 * Math.PI) / 180;
+  x.add(block2);
+
+  return x;
+}
+
+export function generateO() {
+  var size = 1.2;
+  const O = new THREE.Mesh(
+    new THREE.TorusBufferGeometry(size, 1.6 - size, 6, 6),
+    new THREE.MeshLambertMaterial({ color: 0xf5f3f0 })
+  );
+
+  return O;
+}
+
+export function addXToBlock(object) {
+  var x = generateX();
+  x.position.z = 3;
+  object.add(x);
+}
+
+export function addOToBlock(object) {
+  var O = generateO();
+  O.position.z = 3;
+  object.add(O);
+}

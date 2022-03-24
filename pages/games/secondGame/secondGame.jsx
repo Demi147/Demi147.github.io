@@ -5,6 +5,8 @@ import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import * as TICK from "../../../shared/lib/tickTackToe/tickTackToe";
 //import { useEffect } from "react/cjs/react.production.min";
 
+var blocks = [];
+
 function onload() {
   // === THREE.JS CODE START ===
   var scene = TICK.createScene();
@@ -28,7 +30,18 @@ function onload() {
   document.getElementById("secondGame").appendChild(renderer.domElement);
 
   var background = TICK.generateBackGround();
+  blocks = background.children;
   scene.add(background);
+
+  //TICK.addOToBlock(blocks[0]);
+  for (let index = 0; index < 3; index++) {
+    const element = blocks[index];
+    TICK.addOToBlock(element);
+  }
+  for (let index = 3; index < 6; index++) {
+    const element = blocks[index];
+    TICK.addXToBlock(element);
+  }
 
   //#region INIT GAME LOGIC
 
