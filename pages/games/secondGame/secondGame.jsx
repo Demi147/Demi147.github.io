@@ -2,11 +2,14 @@ import { React, useEffect } from "react";
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import * as TICK from "../../../shared/lib/tickTackToe/tickTackToe";
+import { Logic } from "../../../shared/lib/tickTackToe/gameLogic";
 
 //Global vars
 var blocks = [];
 const raycaster = new THREE.Raycaster();
 const pointer = new THREE.Vector2();
+
+var logic = new Logic();
 
 function onPointerMove(event) {
   var temp = document.getElementById("secondGame");
@@ -17,7 +20,10 @@ function onPointerMove(event) {
 
 function onPointerClick(event) {
   const intersects = raycaster.intersectObjects(blocks, false);
-  TICK.HandleUserClick(intersects[0].object);
+  if (intersects[0]) {
+    logic.handleUserinput(intersects[0].object);
+  }
+  //TICK.HandleUserClick(intersects[0].object);
 }
 
 function onload() {
@@ -78,14 +84,6 @@ function SecondGame() {
   useEffect(() => {
     setupEvents();
     onload();
-
-    var worker = new Worker(
-      new URL("../../../shared/lib/tickTackToe/AI.worker.js", import.meta.url)
-    );
-    worker.postMessage("test");
-    worker.onmessage = function (e) {
-      console.log(e.data);
-    };
   });
 
   return (

@@ -1,10 +1,5 @@
 import * as AI from "./ticktacToeAI";
 
-if (Array.prototype.equals)
-  console.warn(
-    "Overriding existing Array.prototype.equals. Possible causes: New API defines the method, there's a framework conflict or you've got double inclusions in your code."
-  );
-// attach the .equals method to Array's prototype to call it on any array
 Array.prototype.equals = function (array) {
   // if the other array is a falsy value, return
   if (!array) return false;
@@ -26,6 +21,7 @@ Array.prototype.equals = function (array) {
 };
 
 self.onmessage = function (e) {
+  console.log(e);
   AI.resetPrevStates();
   AI.minmax([null, null, null, null, null, null, null, null, null], 9, false);
 };
