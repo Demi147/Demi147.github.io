@@ -84,22 +84,17 @@ export function hoverEffect(board, intersects) {
   for (let i = 0; i < intersects.length; i++) {
     intersects[i].object.material.color.set(0xff0000);
   }
-  debugger;
-  board.forEach((q) => {
-    intersects.forEach((w) => {
-      if (w.uuid == q.uuid) {
-        console.log("a");
-      }
-    });
-  });
 
   var others = board.filter(
     (q) => !intersects.some((w) => w.object.uuid == q.uuid)
   );
-  console.log(others);
 
   for (let index = 0; index < others.length; index++) {
     const element = others[index];
     element.material.color.set(0x353535);
   }
+}
+
+export function HandleUserClick(object) {
+  addXToBlock(object);
 }

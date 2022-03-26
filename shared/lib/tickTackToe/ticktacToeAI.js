@@ -8,14 +8,9 @@ var count = 0;
 
 export function minmax(board, depth, player) {
   var util = utilityFunction(board);
-  if (depth == 0 || util[0] == true) {
-    if (util[0] == true) {
-      console.log(`Winner player : ${util[1]}`);
-      console.log(board);
-      count++;
-      console.log(count);
-    }
-    return util[1];
+
+  if (depth == 0 || (util.terminal && util.player != null)) {
+    return util.score;
   }
 
   if (!player) {
@@ -55,95 +50,126 @@ function performMove(player, node, board) {
 }
 
 function utilityFunction(board) {
+  var returnObject = {
+    terminal: false,
+    player: null,
+    score: 0,
+  };
+
   var verticals = checkVerticals(board);
   var horizontals = checkHorizontals(board);
   var slices = checkCrosses(board);
 
-  if (verticals[0]) {
-    if (verticals[1]) {
-      return [true, 1];
-    } else {
-      return [true, -1];
-    }
+  if (verticals.terminal) {
+    returnObject.terminal = true;
+    returnObject.player = verticals.player;
+    returnObject.score = verticals.player ? -1 : 1;
+    return returnObject;
+  }
+  if (horizontals.terminal) {
+    returnObject.terminal = true;
+    returnObject.player = horizontals.player;
+    returnObject.score = horizontals.player ? -1 : 1;
+    return returnObject;
+  }
+  if (slices.terminal) {
+    returnObject.terminal = true;
+    returnObject.player = slices.player;
+    returnObject.score = slices.player ? -1 : 1;
+    return returnObject;
   }
 
-  if (horizontals[0]) {
-    if (horizontals[1]) {
-      return [true, 1];
-    } else {
-      return [true, 0 - 1];
-    }
+  if (checkForDraw(board)) {
+    returnObject.terminal = true;
+    returnObject.player = null;
+    returnObject.score = 0;
   }
 
-  if (slices[0]) {
-    if (slices[1]) {
-      return [true, 1];
-    } else {
-      return [true, -1];
-    }
-  }
+  return returnObject;
+}
 
-  return [false, 0];
+function checkForDraw(board) {
+  return board.some((q) => q == null);
 }
 
 function checkVerticals(board) {
+  var returnObject = {
+    terminal: false,
+    player: null,
+  };
   for (let index = 0; index < 3; index++) {
     var base = board[index];
     var baseMiddle = board[index + 3];
     var baseTop = board[index + 6];
 
     if (base == true && baseMiddle == true && baseTop == true) {
-      return [true, true];
+      returnObject.terminal = true;
+      returnObject.player = true;
     }
 
     if (base == false && baseMiddle == false && baseTop == false) {
-      return [true, false];
+      returnObject.terminal = true;
+      returnObject.player = false;
     }
   }
 
-  return [false, false];
+  return returnObject;
 }
 
 function checkHorizontals(board) {
+  var returnObject = {
+    terminal: false,
+    player: null,
+  };
   for (let index = 0; index < 7; index = index + 3) {
     var base = board[index];
     var baseMiddle = board[index + 1];
     var baseRight = board[index + 2];
 
     if (base == true && baseMiddle == true && baseRight == true) {
-      return [true, true];
+      returnObject.terminal = true;
+      returnObject.player = true;
     }
     if (base == false && baseMiddle == false && baseRight == false) {
-      return [true, false];
+      returnObject.terminal = true;
+      returnObject.player = false;
     }
   }
 
-  return [false, false];
+  return returnObject;
 }
 
 function checkCrosses(board) {
+  var returnObject = {
+    terminal: false,
+    player: null,
+  };
   //check //
   var leftBottom = board[0];
   var middle = board[4];
   var topRight = board[8];
   if (leftBottom == true && middle == true && topRight == true) {
-    return [true, true];
+    returnObject.terminal = true;
+    returnObject.player = true;
   }
   if (leftBottom == false && middle == false && topRight == false) {
-    return [true, false];
+    returnObject.terminal = true;
+    returnObject.player = false;
   }
 
   //check \\
   var leftTop = board[6];
   var rightBottom = board[2];
-  if (leftBottom == true && middle == true && topRight == true) {
-    return [true, true];
+  if (rightBottom == true && middle == true && leftTop == true) {
+    returnObject.terminal = true;
+    returnObject.player = true;
   }
-  if (leftBottom == false && middle == false && topRight == false) {
-    return [true, false];
+  if (rightBottom == false && middle == false && leftTop == false) {
+    returnObject.terminal = true;
+    returnObject.player = false;
   }
 
-  return [false, false];
+  return returnObject;
 }
 
 function getPosibleMovesandPerform(board, player) {

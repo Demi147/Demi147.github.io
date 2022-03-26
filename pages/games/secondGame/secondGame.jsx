@@ -15,6 +15,11 @@ function onPointerMove(event) {
   pointer.y = -((event.clientY - rect.top) / temp.clientHeight) * 2 + 1;
 }
 
+function onPointerClick(event) {
+  const intersects = raycaster.intersectObjects(blocks, false);
+  TICK.HandleUserClick(intersects[0].object);
+}
+
 function onload() {
   // === THREE.JS CODE START ===
   var scene = TICK.createScene();
@@ -41,15 +46,6 @@ function onload() {
   blocks = background.children;
   scene.add(background);
 
-  for (let index = 0; index < 3; index++) {
-    const element = blocks[index];
-    TICK.addOToBlock(element);
-  }
-  for (let index = 3; index < 6; index++) {
-    const element = blocks[index];
-    TICK.addXToBlock(element);
-  }
-
   var resizeLoop = function () {
     requestAnimationFrame(resizeLoop);
     var y = document.getElementById("secondGame").clientHeight;
@@ -74,6 +70,8 @@ function setupEvents() {
   document
     .getElementById("secondGame")
     .addEventListener("pointermove", onPointerMove);
+  document.getElementById("secondGame");
+  addEventListener("click", onPointerClick);
 }
 
 function SecondGame() {
@@ -81,13 +79,13 @@ function SecondGame() {
     setupEvents();
     onload();
 
-    // var worker = new Worker(
-    //   new URL("../../../shared/lib/tickTackToe/AI.worker.js", import.meta.url)
-    // );
-    // worker.postMessage("test");
-    // worker.onmessage = function (e) {
-    //   console.log(e.data);
-    // };
+    var worker = new Worker(
+      new URL("../../../shared/lib/tickTackToe/AI.worker.js", import.meta.url)
+    );
+    worker.postMessage("test");
+    worker.onmessage = function (e) {
+      console.log(e.data);
+    };
   });
 
   return (
