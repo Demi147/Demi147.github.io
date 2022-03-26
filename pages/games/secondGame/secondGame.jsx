@@ -1,11 +1,19 @@
 import { React, useEffect } from "react";
 import * as THREE from "three";
-import { generateCar } from "../../../shared/lib/helperMethods";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import * as TICK from "../../../shared/lib/tickTackToe/tickTackToe";
-//import { useEffect } from "react/cjs/react.production.min";
 
+//Global vars
 var blocks = [];
+const raycaster = new THREE.Raycaster();
+const pointer = new THREE.Vector2();
+
+function onPointerMove(event) {
+  var temp = document.getElementById("secondGame");
+  var rect = temp.getBoundingClientRect();
+  pointer.x = ((event.clientX - rect.left) / temp.clientWidth) * 2 - 1;
+  pointer.y = -((event.clientY - rect.top) / temp.clientHeight) * 2 + 1;
+}
 
 function onload() {
   // === THREE.JS CODE START ===
@@ -33,7 +41,6 @@ function onload() {
   blocks = background.children;
   scene.add(background);
 
-  //TICK.addOToBlock(blocks[0]);
   for (let index = 0; index < 3; index++) {
     const element = blocks[index];
     TICK.addOToBlock(element);
@@ -42,10 +49,6 @@ function onload() {
     const element = blocks[index];
     TICK.addXToBlock(element);
   }
-
-  //#region INIT GAME LOGIC
-
-  //#endregion
 
   var resizeLoop = function () {
     requestAnimationFrame(resizeLoop);
@@ -57,21 +60,34 @@ function onload() {
 
   var cameraLoop = function () {
     requestAnimationFrame(cameraLoop);
+
+    raycaster.setFromCamera(pointer, camera);
+    const intersects = raycaster.intersectObjects(blocks, false);
+    TICK.hoverEffect(blocks, intersects);
+
     renderer.render(scene, camera);
   };
   cameraLoop();
 }
 
+function setupEvents() {
+  document
+    .getElementById("secondGame")
+    .addEventListener("pointermove", onPointerMove);
+}
+
 function SecondGame() {
   useEffect(() => {
+    setupEvents();
     onload();
-    var worker = new Worker(
-      new URL("../../../shared/lib/tickTackToe/AI.worker.js", import.meta.url)
-    );
-    worker.postMessage("test");
-    worker.onmessage = function (e) {
-      console.log(e.data);
-    };
+
+    // var worker = new Worker(
+    //   new URL("../../../shared/lib/tickTackToe/AI.worker.js", import.meta.url)
+    // );
+    // worker.postMessage("test");
+    // worker.onmessage = function (e) {
+    //   console.log(e.data);
+    // };
   });
 
   return (

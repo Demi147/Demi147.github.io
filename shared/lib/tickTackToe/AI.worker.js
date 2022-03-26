@@ -26,7 +26,6 @@ Array.prototype.equals = function (array) {
 };
 
 self.onmessage = function (e) {
-  postMessage(69);
   AI.resetPrevStates();
   AI.minmax([null, null, null, null, null, null, null, null, null], 8, false);
 };
