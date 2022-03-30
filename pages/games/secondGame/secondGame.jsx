@@ -5,7 +5,6 @@ import * as TICK from "../../../shared/lib/tickTackToe/tickTackToe";
 import { Logic } from "../../../shared/lib/tickTackToe/gameLogic";
 
 //Global vars
-var blocks = [];
 const raycaster = new THREE.Raycaster();
 const pointer = new THREE.Vector2();
 
@@ -19,7 +18,7 @@ function onPointerMove(event) {
 }
 
 function onPointerClick(event) {
-  const intersects = raycaster.intersectObjects(blocks, false);
+  const intersects = raycaster.intersectObjects(logic.blocks, false);
   if (intersects[0]) {
     logic.handleUserinput(intersects[0].object);
   }
@@ -49,7 +48,7 @@ function onload() {
   document.getElementById("secondGame").appendChild(renderer.domElement);
 
   var background = TICK.generateBackGround();
-  blocks = background.children;
+  logic.blocks = background.children;
   scene.add(background);
 
   var resizeLoop = function () {
@@ -64,8 +63,8 @@ function onload() {
     requestAnimationFrame(cameraLoop);
 
     raycaster.setFromCamera(pointer, camera);
-    const intersects = raycaster.intersectObjects(blocks, false);
-    TICK.hoverEffect(blocks, intersects);
+    const intersects = raycaster.intersectObjects(logic.blocks, false);
+    TICK.hoverEffect(logic.blocks, intersects);
 
     renderer.render(scene, camera);
   };

@@ -6,10 +6,37 @@ export function resetPrevStates() {
 
 var count = 0;
 
+export function startAi(board) {
+  var startState = [...board];
+  var moves = getPosibleMovesandPerform(startState, false);
+  var min = -9;
+  var moveToMake = null;
+  moves.forEach((element, index) => {
+    var value = minmax(board, 8, false);
+    if (value > min) {
+      min = value;
+      moveToMake = index;
+    }
+  });
+  var move = findDiffrence(board, moves[moveToMake]);
+  postMessage(move);
+}
+
+function findDiffrence(mainState, nextState) {
+  for (let index = 0; index < mainState.length; index++) {
+    const element1 = mainState[index];
+    const element2 = nextState[index];
+    if (element1 != element2) {
+      return index;
+    }
+  }
+  return 0;
+}
+
 export function minmax(board, depth, player) {
   var util = utilityFunction(board);
 
-  if (depth == 0 || (util.terminal && util.player != null)) {
+  if (depth == 0 || util.terminal) {
     return util.score;
   }
 

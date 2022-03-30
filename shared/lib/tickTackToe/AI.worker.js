@@ -23,5 +23,5 @@ Array.prototype.equals = function (array) {
 self.onmessage = function (e) {
   console.log(e);
   AI.resetPrevStates();
-  AI.minmax([null, null, null, null, null, null, null, null, null], 9, false);
+  AI.startAi(e.data);
 };
