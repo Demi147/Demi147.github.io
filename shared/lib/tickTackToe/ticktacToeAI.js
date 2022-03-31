@@ -12,9 +12,11 @@ export function startAi(board) {
   var min = -9;
   var moveToMake = null;
   moves.forEach((element, index) => {
-    var value = minmax(board, 8, false);
-    if (value > min) {
-      min = value;
+    var x = minmax(element, 9, false);
+    //console.log(minmax(element, 9, false));
+    //console.log(`Value : ${x} + min : ${min}`);
+    if (x > min) {
+      min = x;
       moveToMake = index;
     }
   });
@@ -35,8 +37,11 @@ function findDiffrence(mainState, nextState) {
 
 export function minmax(board, depth, player) {
   var util = utilityFunction(board);
-
+  //console.log(`Board : ${board} + score ${util.score}`);
+  //console.log(util);
   if (depth == 0 || util.terminal) {
+    //console.log(`Board : ${board} + score ${util.score}`);
+    //console.log(`score ${util.score}`);
     return util.score;
   }
 
@@ -45,28 +50,34 @@ export function minmax(board, depth, player) {
     var value = -9;
     var moves = getPosibleMovesandPerform(board, true);
     moves.forEach((element) => {
-      if (!previousStates.some((q) => q.equals(element))) {
-        previousStates.push(element);
-        var tempVal = minmax(element, depth - 1, true);
-        if (tempVal > value) {
-          value = tempVal;
-        }
+      var tempVal = minmax(element, depth - 1, true);
+      if (tempVal > value) {
+        value = tempVal;
       }
     });
+    return value;
   } else {
     //Player
     var value = 9;
     var moves = getPosibleMovesandPerform(board, false);
     moves.forEach((element) => {
-      if (!previousStates.some((q) => q.equals(element))) {
-        previousStates.push(element);
-        var tempVal = minmax(element, depth - 1, false);
-        if (tempVal < value) {
-          value = tempVal;
-        }
+      var tempVal = minmax(element, depth - 1, false);
+      if (tempVal < value) {
+        value = tempVal;
       }
     });
+    return value;
   }
+
+  if (
+    getPosibleMovesandPerform(board, !player).length == 0 ||
+    getPosibleMovesandPerform(board, player).length == 0
+  ) {
+    console.log("No moves WTF");
+  }
+  // console.log(board);
+  // console.log(player);
+  // console.log(previousStates.some((q) => q.equals(board)));
 }
 
 function performMove(player, node, board) {
@@ -111,12 +122,11 @@ function utilityFunction(board) {
     returnObject.player = null;
     returnObject.score = 0;
   }
-
   return returnObject;
 }
 
 function checkForDraw(board) {
-  return board.some((q) => q == null);
+  return !board.some((el) => el !== true && el !== false);
 }
 
 function checkVerticals(board) {
